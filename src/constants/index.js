@@ -14,7 +14,7 @@ export const navLinks = [
     title: "About Dyslexia",
   },
   {
-    id: "clients",
+    id: "OurTests",
     title: "Dyslexia Predictor",
   },
 ];
