@@ -3,9 +3,9 @@ import { Navbar, Hero, Stats, Billing, CardDeal, Business, OurTests, Footer, Tes
 import styles from "./style";
 import DyslexiaTests from "./components/DyslexiaTests"; // Import your test page
 import Test1 from "./components/Test1"; // Import Test1 page
-//import Test2 from "./components/Test2"; // Import Test2 page
-//import Test3 from "./components/Test3"; // Import Test3 page
-//import Test4 from "./components/Test4"; // Import Test4 page
+import Test2 from "./components/Test2"; // Import Test2 page
+import Test3 from "./components/Test3"; // Import Test3 page
+import Test4 from "./components/Test4"; // Import Test4 page
 
 const App = () => (
   <Router>
@@ -62,7 +62,10 @@ const MainContent = () => {
 
         {/* Individual Test Pages */}
         <Route path="/test1" element={<Test1 />} />
-   
+        <Route path="/test2" element={<Test2 />} />
+        <Route path="/test3" element={<Test3 />} />
+        <Route path="/test4" element={<Test4 />} />
+
       </Routes>
 
       {/* Footer (common for all pages) */}

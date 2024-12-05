@@ -55,7 +55,7 @@ const DyslexiaTests = () => {
           <p className="text-dimWhite text-lg max-w-[470px] mb-8">
             In this game, you will need to identify the letter "E" among a sea of the letter "F". This tests your ability to distinguish between similar-looking characters.
           </p>
-          <Button onClick={() => alert('Start Game 2!')} className="bg-blue-gradient text-primary font-medium text-[18px] py-4 px-6 rounded-[10px] outline-none">
+          <Button onClick={() => navigate('/test2')} className="bg-blue-gradient text-primary font-medium text-[18px] py-4 px-6 rounded-[10px] outline-none">
             Start Game 2
           </Button>
         </div>
@@ -76,7 +76,7 @@ const DyslexiaTests = () => {
           <p className="text-dimWhite text-lg max-w-[470px] mb-8">
             In this game, you will be presented with a scrambled set of letters. Your challenge is to rearrange them to form a valid word.
           </p>
-          <Button onClick={() => alert('Start Game 3!')} className="bg-blue-gradient text-primary font-medium text-[18px] py-4 px-6 rounded-[10px] outline-none">
+          <Button onClick={() => navigate('/test3')} className="bg-blue-gradient text-primary font-medium text-[18px] py-4 px-6 rounded-[10px] outline-none">
             Start Game 3
           </Button>
         </div>
@@ -101,7 +101,7 @@ const DyslexiaTests = () => {
           <p className="text-dimWhite text-lg max-w-[470px] mb-8">
             In this game, you'll be shown a word with one incorrect letter. Your task is to identify and eliminate the incorrect letter to form a valid word.
           </p>
-          <Button onClick={() => alert('Start Game 4!')} className="bg-blue-gradient text-primary font-medium text-[18px] py-4 px-6 rounded-[10px] outline-none">
+          <Button onClick={() => navigate('/test4')} className="bg-blue-gradient text-primary font-medium text-[18px] py-4 px-6 rounded-[10px] outline-none">
             Start Game 4
           </Button>
         </div>
