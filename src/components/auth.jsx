@@ -11,6 +11,8 @@ const Auth = ({ onAuthSuccess }) => {
     confirmPassword: "",
   });
 
+  const [error, setError] = useState(""); // State for storing error messages
+
   // Handle input changes
   const handleChange = (e) => {
     setFormData({
@@ -26,7 +28,7 @@ const Auth = ({ onAuthSuccess }) => {
 
     // Password confirmation check for registration
     if (!isLogin && formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
 
@@ -43,17 +45,18 @@ const Auth = ({ onAuthSuccess }) => {
         throw new Error(data.error || "Authentication failed");
       }
 
+      setError(""); // Clear error on success
+
       if (isLogin) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         onAuthSuccess(); // Update authentication state
         navigate("/");
       } else {
-        alert("Registration successful! Please log in.");
         setIsLogin(true);
       }
     } catch (error) {
-      alert(error.message || "Something went wrong.");
+      setError(error.message); // Set error message in UI
     }
   };
 
@@ -77,6 +80,12 @@ const Auth = ({ onAuthSuccess }) => {
             <h3 className="text-2xl font-semibold text-white mb-6">
               {isLogin ? "Sign In" : "Create Account"}
             </h3>
+
+            {/* Display Error Message */}
+            {error && (
+              <p className="text-red-500 text-sm mb-4">{error}</p>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               
               {/* Name Field (Only for Registration) */}
@@ -158,7 +167,10 @@ const Auth = ({ onAuthSuccess }) => {
               <p className="text-gray-400">
                 {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
                 <button
-                  onClick={() => setIsLogin(!isLogin)}
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setError(""); // Clear error when switching forms
+                  }}
                   className="text-[#2AA198] hover:underline focus:outline-none"
                 >
                   {isLogin ? "Sign up" : "Sign in"}
@@ -175,7 +187,7 @@ const Auth = ({ onAuthSuccess }) => {
               and{" "}
               <a href="#" className="text-[#2AA198] hover:underline">
                 Privacy Policy
-              </a>
+              </a>.
             </div>
           </div>
         </div>
