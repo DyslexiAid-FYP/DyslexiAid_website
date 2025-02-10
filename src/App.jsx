@@ -1,11 +1,13 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { Navbar, Hero, Stats, Billing, CardDeal, Business, OurTests, Footer, Testimonials, CTA } from "./components";
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Navbar, Hero, Stats, Billing, Business, OurTests } from "./components";
 import styles from "./style";
-import DyslexiaTests from "./components/DyslexiaTests"; // Import your test page
-import Test1 from "./components/Test1"; // Import Test1 page
-import Test2 from "./components/Test2"; // Import Test2 page
-import Test3 from "./components/Test3"; // Import Test3 page
-import Test4 from "./components/Test4"; // Import Test4 page
+import DyslexiaTests from "./components/DyslexiaTests";
+import Test1 from "./components/Test1";
+import Test2 from "./components/Test2";
+import Test3 from "./components/Test3";
+import Test4 from "./components/Test4";
+import Auth from "./components/auth";
 
 const App = () => (
   <Router>
@@ -14,66 +16,74 @@ const App = () => (
 );
 
 const MainContent = () => {
-  const location = useLocation(); // Get the current location (route)
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Check authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAuthenticated") === "true"
+  );
 
-  // Hide Navbar only for the /tests route and individual test routes
+  // Hide navbar on test pages
   const hideNavbar = ['/tests', '/test1', '/test2', '/test3', '/test4'].includes(location.pathname);
 
+  // Login Success Handler
+  const handleAuthSuccess = () => {
+    localStorage.setItem("isAuthenticated", "true"); // Save login state
+    setIsAuthenticated(true);
+  };
+
+  // Logout Handler
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsAuthenticated(false);
+    navigate("/"); // Redirect to login page
+  };
+
   return (
-    <div className="bg-primary w-full overflow-hidden">
-      {/* Conditionally render Navbar */}
-      {!hideNavbar && (
+    <div className="bg-primary ">
+      {!hideNavbar && isAuthenticated && (
         <div className={`${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
-            <Navbar />
+            <Navbar onLogout={handleLogout} /> {/* Pass logout function to Navbar */}
           </div>
         </div>
       )}
 
-      {/* Define Routes */}
       <Routes>
-        {/* Home Page */}
         <Route
           path="/"
           element={
-            <div>
-              <div className={`bg-primary ${styles.flexStart}`}>
-                <div className={`${styles.boxWidth}`}>
-                  <Hero />
+            isAuthenticated ? (
+              <div>
+                <div className={`bg-primary ${styles.flexStart}`}>
+                  <div className={`${styles.boxWidth}`}>
+                    <Hero />
+                    <Stats />
+                    <Business />
+                    <Billing />
+                    <OurTests />
+                  </div>
                 </div>
               </div>
-              <div className={`bg-primary ${styles.paddingX} ${styles.flexStart}`}>
-                <div className={`${styles.boxWidth}`}>
-                  <Stats />
-                  <Business />
-                  <Billing />
-                  <CardDeal />
-                  <Testimonials />
-                  <OurTests />
-                  <CTA />
-                </div>
-              </div>
-            </div>
+            ) : (
+              <Auth onAuthSuccess={handleAuthSuccess} />
+            )
           }
         />
 
-        {/* Dyslexia Tests Page */}
-        <Route path="/tests" element={<DyslexiaTests />} />
-
-        {/* Individual Test Pages */}
-        <Route path="/test1" element={<Test1 />} />
-        <Route path="/test2" element={<Test2 />} />
-        <Route path="/test3" element={<Test3 />} />
-        <Route path="/test4" element={<Test4 />} />
-
+        {isAuthenticated && (
+          <>
+            <Route path="/tests" element={<DyslexiaTests />} />
+            <Route path="/test1" element={<Test1 />} />
+            <Route path="/test2" element={<Test2 />} />
+            <Route path="/test3" element={<Test3 />} />
+            <Route path="/test4" element={<Test4 />} />
+          </>
+        )}
       </Routes>
-
-      {/* Footer (common for all pages) */}
-      <div className={`${styles.paddingX} ${styles.flexStart}`}>
-        <div className={`${styles.boxWidth}`}>
-          <Footer />
-        </div>
-      </div>
     </div>
   );
 };

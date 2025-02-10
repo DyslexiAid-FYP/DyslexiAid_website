@@ -1,15 +1,28 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import { close, menu } from "../assets";
 import { navLinks } from "../constants";
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   const [active, setActive] = useState("Home");
   const [toggle, setToggle] = useState(false);
+  const navigate = useNavigate();
+
+  // Check if the user is authenticated
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+
+  // Logout Handler
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    onLogout(); // Call parent logout function
+    navigate("/"); // Redirect to login page
+  };
 
   return (
     <nav className="w-full flex py-6 justify-between items-center navbar">
-      
+      <h1 className="text-xl font-bold text-white font-poppins">DyslexiAid</h1>
 
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">
         {navLinks.map((nav, index) => (
@@ -23,8 +36,21 @@ const Navbar = () => {
             <a href={`#${nav.id}`}>{nav.title}</a>
           </li>
         ))}
+
+        {/* Logout Button (Only visible if user is logged in) */}
+        {isAuthenticated && (
+          <li className="ml-10">
+            <button
+              onClick={handleLogout}
+              className=" font-poppins text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+            >
+              Logout
+            </button>
+          </li>
+        )}
       </ul>
 
+      {/* Mobile Menu */}
       <div className="sm:hidden flex flex-1 justify-end items-center">
         <img
           src={toggle ? close : menu}
@@ -50,6 +76,18 @@ const Navbar = () => {
                 <a href={`#${nav.id}`}>{nav.title}</a>
               </li>
             ))}
+
+            {/* Logout Button for Mobile Menu */}
+            {isAuthenticated && (
+              <li className="mt-4">
+                <button
+                  onClick={handleLogout}
+                  className=" px-4 py-2 rounded-md transition duration-200 w-full"
+                >
+                  Logout
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -79,6 +79,24 @@
 .box-shadow {
   box-shadow: 0px 20px 100px -10px rgba(66, 71, 91, 0.1);
 }
+.boxWidth {
+  max-width: 1200px; /* Adjust as needed */
+  width: 100%;
+  margin: 0 auto; /* Center content */
+}
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.flexStart {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
 
 .sidebar {
   -webkit-animation: slide-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -137,4 +155,9 @@
 .white__gradient {
   background: rgba(255, 255, 255, 0.6);
   filter: blur(750px);
+}
+@media screen and (min-width: 1400px) {
+  .container {
+    max-width: 1100px;
+  }
 }

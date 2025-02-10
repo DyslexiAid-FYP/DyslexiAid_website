@@ -1,74 +1,68 @@
-import React from 'react';
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeftIcon } from '@heroicons/react/24/solid'; // Import the back arrow icon
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
-const GoBack = () => {
-  const navigate = useNavigate(); // Initialize the useNavigate hook
-  navigate('/'); // Navigate to the home page
-};
+import { Link } from "react-router-dom"
+import { motion } from "framer-motion"
+import { ArrowLeftIcon } from "@heroicons/react/24/solid"
+import { useNavigate } from "react-router-dom"
+
 const BackgroundPaths = ({ color }) => {
   const paths = [
     "M0 80 Q50 70, 100 50 T200 55",
     "M0 60 Q50 40, 100 67 T200 65",
     "M0 60 Q50 40, 100 43 T200 65",
     "M0 20 Q50 85, 100 70 T200 75",
-  ];
-  
+  ]
+
   return (
     <svg
-    className="absolute inset-0 w-full h-full z-0"
-    viewBox="0 0 200 200"
-    xmlns="http://www.w3.org/2000/svg"
-    preserveAspectRatio="none"
+      className="absolute inset-0 w-full h-full z-0"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="none"
     >
-            <g transform="translate(0,95)">
-
-      {paths.map((d, index) => {
-        const pathElement = (
-          <motion.path
-            key={index}
-            d={d}
-            stroke={color}
-            strokeWidth="2"
-            fill="none"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.8 }}
-            transition={{ duration: 2 + index, repeat: Infinity, repeatType: "loop", ease: "linear" }}
+      <g transform="translate(0,95)">
+        {paths.map((d, index) => {
+          const pathElement = (
+            <motion.path
+              key={index}
+              d={d}
+              stroke={color}
+              strokeWidth="2"
+              fill="none"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.8 }}
+              transition={{ duration: 2 + index, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", ease: "linear" }}
             />
-        );
-        // Alternate: if the index is odd, flip the path horizontally (making it go right-to-left)
-        return index % 2 === 1 ? (
-          <g key={index} transform="translate(200,0) scale(-1,1)">
-            {pathElement}
-          </g>
-        ) : (
-          pathElement
-          );
+          )
+          return index % 2 === 1 ? (
+            <g key={index} transform="translate(200,0) scale(-1,1)">
+              {pathElement}
+            </g>
+          ) : (
+            pathElement
+          )
         })}
       </g>
     </svg>
-  );
-};
+  )
+}
 
 const TestCard = ({ title, description, icon, testNumber, gradient }) => (
-  <Link to={`/test${testNumber}`} className="block w-full">
+  <Link to={`/test${testNumber}`} className="block w-full h-full">
     <div
-      className={`relative overflow-hidden rounded-2xl p-6 h-[320px] transition-transform hover:scale-105 ${gradient}`}
-      >
-      {/* Vibrant gradient background */}
+      className={`relative overflow-hidden rounded-2xl p-4 h-full flex flex-col transition-transform hover:scale-105 ${gradient} md:min-h-[230px]  `}
+    >
       <div className="absolute inset-0 z-0"></div>
-      
-      {/* Animated wavy paths */}
       <BackgroundPaths color="rgba(255,255,255,0.5)" />
-      
-      {/* Card content */}
       <div className="relative z-20 h-full flex flex-col">
-        <div className=" justify-items-end">{icon}</div>
-        <h3 className="text-white text-2xl font-semibold mb-8">{title}</h3>
-        <p className="text-white/80 text-md leading-relaxed">{description}</p>
+        <div className="justify-items-end">{icon}</div>
+        <h3 className="text-white text-xl font-bold mb-5 ">{title}</h3>
+        <p className="text-white/80 text-md font-semibold leading-relaxed">{description}</p>
         <div className="mt-auto flex justify-end">
-          <svg className="w-6 h-6 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="w-5 h-5 text-white/60"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </div>
@@ -77,19 +71,21 @@ const TestCard = ({ title, description, icon, testNumber, gradient }) => (
   </Link>
 );
 
+
 const DyslexiaTests = () => {
-  const navigate = useNavigate(); // Move this inside the component
+  const navigate = useNavigate()
 
   const goBack = () => {
-    navigate('/'); // Navigate to the home page
-  };
+    navigate("/")
+  }
+
   const tests = [
     {
       title: "Reading Speed Test",
       description:
-      "Evaluate your reading speed and comprehension with our adaptive assessment tool designed specifically for dyslexic readers.",
+        "Evaluate your reading speed and comprehension with our adaptive assessment tool designed specifically for dyslexic readers.",
       icon: (
-        <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -106,7 +102,7 @@ const DyslexiaTests = () => {
       description:
         "Test your ability to recognize and differentiate between similar-looking words with our specialized word recognition assessment.",
       icon: (
-        <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -123,7 +119,7 @@ const DyslexiaTests = () => {
       description:
         "Challenge your sequential processing skills with our letter arrangement and pattern recognition exercises.",
       icon: (
-        <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -137,10 +133,9 @@ const DyslexiaTests = () => {
     },
     {
       title: "Phonological Awareness",
-      description:
-        "Assess your phonological processing abilities with our comprehensive sound-based recognition test.",
+      description: "Assess your phonological processing abilities with our comprehensive sound-based recognition test.",
       icon: (
-        <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -152,35 +147,31 @@ const DyslexiaTests = () => {
       testNumber: 4,
       gradient: "bg-gradient-to-br from-green-400 to-cyan-500",
     },
-  ];
+  ]
 
   return (
-    <div className="min-h-screen w-full bg-gray-900 flex flex-col items-center justify-center overflow-hidden">
-      <div className="absolute top-20 left-16">
+    <div className="h-screen w-full bg-gray-900 flex flex-col items-center justify-center overflow-hidden">
+      <div className="absolute top-8 left-8">
         <button
-          onClick={goBack} // Use the goBack function here
+          onClick={goBack}
           className="text-white flex items-center space-x-2 hover:text-blue-400 transition duration-200"
         >
-          <ArrowLeftIcon className="h-6 w-6" />
-          <span className="text-lg font-semibold hover:underline">Back to tests</span>
+          <ArrowLeftIcon className="h-5 w-5" />
+          <span className="text-base font-semibold hover:underline">Back to tests</span>
         </button>
       </div>
-      <div className="py-16 px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16 relative">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 tracking-tight">
-              Dyslexia Assessment Tests
-            </h1>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-            {tests.map((test, index) => (
-              <TestCard key={index} {...test} />
-            ))}
-          </div>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+        <div className="text-center flex-center mb-10">
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 tracking-tight">Dyslexia Assessment Tests</h1>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+          {tests.map((test, index) => (
+            <TestCard key={index} {...test} />
+          ))}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DyslexiaTests;
+export default DyslexiaTests
