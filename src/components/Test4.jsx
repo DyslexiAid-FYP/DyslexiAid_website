@@ -1,74 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import { ArrowLeftIcon } from "@heroicons/react/24/solid"
+import { useNavigate } from "react-router-dom"
 
 const Game4 = () => {
   const allWords = [
-    { word: 'flower', incorrect: 'flowper' },
-    { word: 'basket', incorrect: 'basxket' },
-    { word: 'purple', incorrect: 'purxple' },
-    { word: 'orange', incorrect: 'oragne' },
-    { word: 'castle', incorrect: 'castel' },
-    { word: 'plant', incorrect: 'planit' },
-    { word: 'pencil', incorrect: 'penxcil' },
-  ];
+    { word: "flower", incorrect: "flowper" },
+    { word: "basket", incorrect: "basxket" },
+    { word: "purple", incorrect: "purpole" },
+    { word: "orange", incorrect: "orlange" },
+    { word: "castle", incorrect: "casftle" },
+    { word: "plant", incorrect: "planit" },
+    { word: "pencil", incorrect: "pehncil" },
+  ]
 
-  const [availableWords, setAvailableWords] = useState([...allWords]); // Remaining words
-  const [currentWord, setCurrentWord] = useState({});
-  const [input, setInput] = useState('');
-  const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [gameOver, setGameOver] = useState(false);
-  const navigate = useNavigate();
+  const [availableWords, setAvailableWords] = useState([...allWords]) // Remaining words
+  const [currentWord, setCurrentWord] = useState({})
+  const [input, setInput] = useState("")
+  const [score, setScore] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(30)
+  const [gameOver, setGameOver] = useState(false)
+  const navigate = useNavigate()
 
   // Initialize the game
   useEffect(() => {
-    selectNewWord();
+    selectNewWord()
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev > 1) return prev - 1;
-        clearInterval(timer);
-        setGameOver(true);
-        return 0;
-      });
-    }, 1000);
+        if (prev > 1) return prev - 1
+        clearInterval(timer)
+        setGameOver(true)
+        return 0
+      })
+    }, 1000)
 
-    return () => clearInterval(timer); // Cleanup on unmount
-  }, []);
+    return () => clearInterval(timer) // Cleanup on unmount
+  }, [])
 
   // Select a new word
   const selectNewWord = () => {
     if (availableWords.length === 0) {
-      setGameOver(true); // End game if no words are left
-      return;
+      setGameOver(true) // End game if no words are left
+      return
     }
 
-    const randomIndex = Math.floor(Math.random() * availableWords.length);
-    const selectedWord = availableWords[randomIndex];
-    setCurrentWord(selectedWord);
+    const randomIndex = Math.floor(Math.random() * availableWords.length)
+    const selectedWord = availableWords[randomIndex]
+    setCurrentWord(selectedWord)
 
     // Remove the selected word from the pool
-    const updatedWords = [...availableWords];
-    updatedWords.splice(randomIndex, 1); // Remove selected word
-    setAvailableWords(updatedWords);
-  };
+    const updatedWords = [...availableWords]
+    updatedWords.splice(randomIndex, 1) // Remove selected word
+    setAvailableWords(updatedWords)
+  }
 
   // Handle input change
-  const handleInputChange = (e) => setInput(e.target.value.toLowerCase());
+// Handle input change and detect Enter key
+const handleInputChange = (e) => {
+  setInput(e.target.value.toLowerCase());
+
+  if (e.key === "Enter") {
+    handleSubmit();
+  }
+}
 
   // Check the user's answer
   const handleSubmit = () => {
     if (input === currentWord.word) {
-      setScore(score + 1);
-      setInput('');
-      selectNewWord(); // Load a new word
+      setScore(score + 1)
+      setInput("")
+      selectNewWord() // Load a new word
     }
-  };
+  }
 
   // Navigate back to the tests overview
-  const goBack = () => navigate('/tests');
+  const goBack = () => {
+    navigate("/tests", { state: { test4Completed: true } })
+  }
 
   return (
     <div className="bg-primary min-h-screen flex flex-col items-center justify-center text-white">
@@ -86,21 +95,21 @@ const Game4 = () => {
       {/* Game Content */}
       <div className="flex flex-col items-center">
         <h1 className="text-3xl font-bold mb-4">Game 4: Letter Elimination</h1>
-        <p className="text-lg mb-6">
-          Identify and remove the incorrect letter to form a valid word.
-        </p>
+        <p className="text-lg mb-6">Identify and remove the incorrect letter to form a valid word.</p>
         <div className="bg-gray-800 p-4 rounded-lg text-xl font-bold mb-6">
-          {currentWord.incorrect?.toUpperCase() || 'Loading...'}
+          {currentWord.incorrect?.toUpperCase() || "Loading..."}
         </div>
         {!gameOver && (
           <>
             <input
-              type="text"
-              value={input}
-              onChange={handleInputChange}
-              className="p-2 rounded-md text-gray-800"
-              placeholder="Type your answer"
-            />
+  type="text"
+  value={input}
+  onChange={handleInputChange}
+  onKeyDown={handleInputChange} // Listen for Enter key
+  className="p-2 rounded-md text-gray-800"
+  placeholder="Type your answer"
+/>
+
             <button
               onClick={handleSubmit}
               className="mt-4 bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-400 transition"
@@ -144,7 +153,7 @@ const Game4 = () => {
         </motion.div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Game4;
+export default Game4

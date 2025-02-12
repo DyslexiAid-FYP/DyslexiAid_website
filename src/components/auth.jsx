@@ -106,20 +106,16 @@ const Auth = ({ onAuthSuccess }) => {
               )}
 
               {/* Email Field */}
-              <div>
-                <label htmlFor="email" className="block text-gray-300 mb-2">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-2 rounded-md border border-gray-700 bg-[#151923] text-white placeholder:text-gray-500 focus:border-[#2AA198] focus:outline-none transition-colors"
-                />
-              </div>
+              <input
+  id="email"
+  name="email"
+  type="email"
+  value={formData.email}
+  onChange={handleChange}
+  placeholder="you@example.com"
+  className="w-full px-4 py-2 rounded-md border border-gray-700 bg-[#151923] text-white placeholder:text-gray-500 focus:border-[#2AA198] focus:outline-none transition-colors !important"
+/>
+
 
               {/* Password Field */}
               <div>

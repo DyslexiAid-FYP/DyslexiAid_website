@@ -7,7 +7,7 @@ const Test3 = () => {
   const navigate = useNavigate(); // For navigation
 
   // Simpler word bank for easier gameplay
-  const words = ['cat', 'dog', 'sun', 'ball', 'tree', 'book', 'fish', 'apple', 'house'];
+  const words = [ 'ball', 'tree', 'book', 'fish', 'apple', 'house', 'happy'];
   
   const [scrambledWord, setScrambledWord] = useState('');
   const [originalWord, setOriginalWord] = useState('');
@@ -17,15 +17,28 @@ const Test3 = () => {
   const [gameOver, setGameOver] = useState(false);
 
   // Scramble a word
-  const scrambleWord = (word) => word.split('').sort(() => Math.random() - 0.5).join('');
-
+  const scrambleWord = (word) => {
+    let letters = word.split("");
+    
+    for (let i = letters.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [letters[i], letters[j]] = [letters[j], letters[i]]; // Swap letters
+    }
+  
+    let scrambled = letters.join("");
+  
+    // Ensure the scrambled word is different from the original
+    return scrambled === word ? scrambleWord(word) : scrambled;
+  };
+  
   // Generate a new word when the game starts or after a correct answer
   const generateWord = () => {
-    const word = words[Math.floor(Math.random() * words.length)];
+    const shuffledWords = [...words].sort(() => Math.random() - 0.5); // Shuffle words array
+    const word = shuffledWords[Math.floor(Math.random() * shuffledWords.length)];
     setOriginalWord(word);
     setScrambledWord(scrambleWord(word));
   };
-
+  
   // Initialize the game
   useEffect(() => {
     generateWord();
@@ -50,6 +63,14 @@ const Test3 = () => {
       generateWord(); // Generate a new word
     }
   };
+// Handle input change and detect Enter key
+const handleInputChange = (e) => {
+  setInput(e.target.value.toLowerCase());
+
+  if (e.key === "Enter") {
+    handleSubmit();
+  }
+}
 
   // Go back to tests overview
   const goBack = () => navigate('/tests');
@@ -75,14 +96,15 @@ const Test3 = () => {
 
       {/* Input Field */}
       <div className="mt-6">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="text-black px-4 py-2 rounded-md"
-          placeholder="Your answer..."
-          disabled={gameOver} // Disable input after the game ends
-        />
+      <input
+  type="text"
+  value={input}
+  onChange={handleInputChange}
+  onKeyDown={handleInputChange} // Listen for Enter key
+  className="p-2 rounded-md text-gray-800"
+  placeholder="Type your answer"
+/>
+
         <button
           onClick={handleSubmit}
           className={`ml-4 px-4 py-2 rounded-md font-bold text-white ${

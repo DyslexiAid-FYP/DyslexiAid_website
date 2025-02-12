@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ArrowLeftIcon } from "@heroicons/react/24/solid"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
+import Popup from "./Popup.jsx"
+import { useState, useEffect } from "react"
 
 const BackgroundPaths = ({ color }) => {
   const paths = [
@@ -29,7 +30,12 @@ const BackgroundPaths = ({ color }) => {
               fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 0.8 }}
-              transition={{ duration: 2 + index, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", ease: "linear" }}
+              transition={{
+                duration: 2 + index,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "loop",
+                ease: "linear",
+              }}
             />
           )
           return index % 2 === 1 ? (
@@ -45,38 +51,82 @@ const BackgroundPaths = ({ color }) => {
   )
 }
 
-const TestCard = ({ title, description, icon, testNumber, gradient }) => (
-  <Link to={`/test${testNumber}`} className="block w-full h-full">
-    <div
-      className={`relative overflow-hidden rounded-2xl p-4 h-full flex flex-col transition-transform hover:scale-105 ${gradient} md:min-h-[230px]  `}
-    >
-      <div className="absolute inset-0 z-0"></div>
-      <BackgroundPaths color="rgba(255,255,255,0.5)" />
-      <div className="relative z-20 h-full flex flex-col">
-        <div className="justify-items-end">{icon}</div>
-        <h3 className="text-white text-xl font-bold mb-5 ">{title}</h3>
-        <p className="text-white/80 text-md font-semibold leading-relaxed">{description}</p>
-        <div className="mt-auto flex justify-end">
-          <svg
-            className="w-5 h-5 text-white/60"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
+const TestCard = ({ title, description, icon, testNumber, gradient, completed }) => {
+  const navigate = useNavigate()
+  const cardGradient = completed ? "bg-gray-500" : gradient //if completed change to gray else original gradient
+
+  const handleTestClick = () => {
+    navigate(`/test${testNumber}`)
+  }
+
+  return (
+    <div onClick={handleTestClick} className="block w-full h-full cursor-pointer">
+      <div
+        className={`relative overflow-hidden rounded-2xl p-4 h-full flex flex-col transition-transform hover:scale-105 ${cardGradient} md:min-h-[230px]  opacity-80`}
+      >
+        <div className="absolute inset-0 z-0"></div>
+        <BackgroundPaths color="rgba(255,255,255,0.5)" />
+        <div className="relative z-20 h-full flex flex-col">
+          <div className="justify-items-end">{icon}</div>
+          <h3 className="text-white text-xl font-bold mb-5 ">{title}</h3>
+          <p className="text-white/80 text-md font-semibold leading-relaxed">{description}</p>
+          <div className="mt-auto flex justify-end">
+            <svg
+              className="w-5 h-5 text-white/60"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
-  </Link>
-);
-
+  )
+}
 
 const DyslexiaTests = () => {
   const navigate = useNavigate()
+  const [showPopup, setShowPopup] = useState(false)
+  const location = useLocation()
+  const [completedTests, setCompletedTests] = useState([])
+
+  useEffect(() => {
+    if (location.state?.test4Completed) {
+      setShowPopup(true)
+      setCompletedTests((prev) => [...prev, 4])
+    }
+
+    // Load completed tests from local storage on component mount
+    const storedCompletedTests = localStorage.getItem("completedTests")
+    if (storedCompletedTests) {
+      setCompletedTests(JSON.parse(storedCompletedTests))
+    }
+  }, [location.state])
+
+  useEffect(() => {
+    // Store completed tests in local storage whenever it changes
+    localStorage.setItem("completedTests", JSON.stringify(completedTests))
+  }, [completedTests])
 
   const goBack = () => {
     navigate("/")
+  }
+
+  const closePopup = () => {
+    setShowPopup(false)
+    // Clear the state so the popup doesn't reappear on subsequent visits
+    navigate("/tests", { replace: true, state: {} })
+  }
+
+  const handleTestComplete = (testNumber) => {
+    setCompletedTests((prev) => {
+      if (!prev.includes(testNumber)) {
+        return [...prev, testNumber]
+      }
+      return prev // Avoid adding duplicates
+    })
   }
 
   const tests = [
@@ -132,8 +182,8 @@ const DyslexiaTests = () => {
       gradient: "bg-gradient-to-br from-yellow-400 to-orange-500",
     },
     {
-      title: "Phonological Awareness",
-      description: "Assess your phonological processing abilities with our comprehensive sound-based recognition test.",
+      title: "Letter Elimination",
+      description: "Assess your word forming abilities with our comprehensive letter elimination test.",
       icon: (
         <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -161,15 +211,28 @@ const DyslexiaTests = () => {
         </button>
       </div>
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-        <div className="text-center flex-center mb-10">
-          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 tracking-tight">Dyslexia Assessment Tests</h1>
+        <div className="text-center flex-center mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold text-white tracking-tight mt-2">Dyslexia Assessment Tests</h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
           {tests.map((test, index) => (
-            <TestCard key={index} {...test} />
+            <TestCard
+              key={index}
+              {...test}
+              completed={completedTests.includes(test.testNumber)}
+            />
           ))}
         </div>
       </div>
+      {showPopup && (
+        <Popup onClose={closePopup}>
+          <h2>Congratulations!</h2>
+          <p>You have completed the Letter Elimination test.</p>
+          <button onClick={closePopup} className="bg-blue-500 text-white py-2 px-4 rounded">
+            Close
+          </button>
+        </Popup>
+      )}
     </div>
   )
 }
