@@ -12,6 +12,7 @@ const Test2 = () => {
 
   const [grid, setGrid] = useState([]);
   const [score, setScore] = useState(0);
+  const [misses, setMisses] = useState(0); // Track misses
   const [timeLeft, setTimeLeft] = useState(timeLimit);
   const [gameOver, setGameOver] = useState(false);
 
@@ -44,14 +45,55 @@ const Test2 = () => {
 
     return () => clearInterval(timer); // Cleanup on unmount
   }, []);
-
+  useEffect(() => {
+    if (gameOver) {
+      console.log('Game Over, submitting test results...');
+      
+      const accuracy = ((score / (score + misses)) * 100).toFixed(2); // Calculate accuracy
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found in localStorage');
+        return;
+      }
+  
+      // Submit the test result with the token
+      fetch('http://localhost:5000/api/test-results/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          testName: 'Letter Focus',
+          score,
+          misses, // Assuming misses are the number of incorrect clicks
+          accuracy,
+        }),
+      })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to submit test result');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('Test result submitted:', data);
+      })
+      .catch((err) => {
+        console.error('Error submitting test result:', err);
+      });
+    }
+  }, [gameOver, score, misses]);
+  
   // Handle letter click
   const handleClick = (letter) => {
     if (gameOver) return;
     if (letter === targetLetter) {
-      setScore(score + 1);
-      setGrid(generateGrid()); // Regenerate the grid on correct click
+      setScore(score + 1); // Correct click, increment score
+    } else {
+      setMisses(misses + 1); // Incorrect click, increment misses
     }
+    setGrid(generateGrid()); // Regenerate the grid on every click
   };
 
   // Handle navigation back to tests overview
@@ -109,6 +151,9 @@ const Test2 = () => {
           <div className="mb-2">
             <span className="font-semibold">Score:</span> {score}
           </div>
+          <div className="mb-2">
+            <span className="font-semibold">Misses:</span> {misses}
+          </div>
         </div>
 
         {/* Game Over Message */}
@@ -121,7 +166,10 @@ const Test2 = () => {
           >
             <h2 className="text-2xl font-bold text-red-500">Game Over!</h2>
             <p className="mt-2">
-              You scored <strong>{score}</strong> points. Great job!
+              You scored <strong>{score}</strong> points with <strong>{misses}</strong> misses.
+            </p>
+            <p>
+              Your accuracy is <strong>{((score / (score + misses)) * 100).toFixed(2)}%</strong>.
             </p>
           </motion.div>
         )}

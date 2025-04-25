@@ -19,21 +19,18 @@ const MainContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Check authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
   );
 
-  // Hide navbar on test pages
   const hideNavbar = ['/tests', '/test1', '/test2', '/test3', '/test4'].includes(location.pathname);
 
-  // Login Success Handler
   const handleAuthSuccess = () => {
-    localStorage.setItem("isAuthenticated", "true"); // Save login state
+    localStorage.setItem("isAuthenticated", "true"); 
     setIsAuthenticated(true);
   };
 
-  // Logout Handler
+  
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("token");

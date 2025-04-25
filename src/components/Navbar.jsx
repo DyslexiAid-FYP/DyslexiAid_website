@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import { close, menu } from "../assets";
 import { navLinks } from "../constants";
-
 const Navbar = ({ onLogout }) => {
   const [active, setActive] = useState("Home");
   const [toggle, setToggle] = useState(false);
@@ -22,7 +21,7 @@ const Navbar = ({ onLogout }) => {
 
   return (
     <nav className="w-full flex py-6 justify-between items-center navbar">
-      <h1 className="text-xl font-bold text-white font-poppins">DyslexiAid</h1>
+      <img src='/logo_d.png' alt='DyslexiAid Logo' className="w-[40px] h-[40px] object-contain " />
 
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">
         {navLinks.map((nav, index) => (

@@ -50,7 +50,49 @@ const Test1 = () => {
 
     return () => clearInterval(timer); // Cleanup on unmount
   }, []);
-
+  useEffect(() => {
+    console.log('Game Over:', gameOver); // Check if gameOver is true
+    
+    if (gameOver) {
+      console.log('Game Over, submitting test results...');
+      
+      const accuracy = ((score / (score + misses)) * 100).toFixed(2);
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found in localStorage');
+        return; // Exit early if token is missing
+      }
+  
+      fetch('http://localhost:5000/api/test-results/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          testName: 'Letter Identification',
+          score,
+          misses,
+          accuracy,
+        }),
+      })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to submit test result');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('Result submitted:', data);
+      })
+      .catch((err) => {
+        console.error('Error:', err);
+      });
+    }
+  }, [gameOver, score, misses]);
+  
+  
   // Handle clicking a cell
   const handleClick = (letter) => {
     if (gameOver) return;
