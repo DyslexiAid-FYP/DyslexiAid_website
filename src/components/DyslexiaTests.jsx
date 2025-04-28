@@ -309,7 +309,7 @@ const DyslexiaTests = () => {
   // Array containing the details for each test card
   const tests = [
     {
-      title: "Reading Speed Test",
+      title: "Letter Recognition",
       description:
         "Evaluate your reading speed and comprehension with our adaptive assessment tool designed specifically for dyslexic readers.",
       icon: (

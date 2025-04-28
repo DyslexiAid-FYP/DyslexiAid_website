@@ -21,7 +21,7 @@ const Navbar = ({ onLogout }) => {
 
   return (
     <nav className="w-full flex py-6 justify-between items-center navbar">
-      <img src='/logo_d.png' alt='DyslexiAid Logo' className="w-[40px] h-[40px] object-contain " />
+      <h1 className="text-xl font-bold text-white font-poppins ml-3">DyslexiAid</h1>
 
       <ul className="list-none sm:flex hidden justify-end items-center flex-1">
         {navLinks.map((nav, index) => (

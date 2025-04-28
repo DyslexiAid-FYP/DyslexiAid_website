@@ -99,7 +99,7 @@ const Auth = ({ onAuthSuccess }) => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="John Doe"
+                    placeholder=" Name"
                     className="w-full px-4 py-2 rounded-md border border-gray-700 bg-[#151923] text-white placeholder:text-gray-500 focus:border-[#2AA198] focus:outline-none transition-colors"
                   />
                 </div>
