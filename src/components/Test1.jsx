@@ -64,7 +64,7 @@ const Test1 = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           testName: 'Letter Identification',
@@ -93,70 +93,71 @@ const Test1 = () => {
   const progress = timeLeft / timeLimit;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 flex flex-col md:flex-row items-center justify-center text-white relative">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 flex flex-col md:flex-row items-center justify-center text-white relative px-2 sm:px-4">
       {/* Back Button */}
       <motion.button
         onClick={GoBack}
-        className="absolute top-6 left-6 flex items-center gap-2 group"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 group"
         whileHover={{ scale: 1.05 }}
       >
-        <ArrowLeftIcon className="h-8 w-8 text-purple-200 group-hover:text-white transition-colors" />
-        <span className="text-xl font-semibold text-purple-200 group-hover:text-white transition-colors">
+        <ArrowLeftIcon className="h-7 w-7 sm:h-8 sm:w-8 text-purple-200 group-hover:text-white transition-colors" />
+        <span className="text-lg sm:text-xl font-semibold text-purple-200 group-hover:text-white transition-colors">
           All Tests
         </span>
       </motion.button>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center space-y-8 p-8 flex-1">
+      <div className="flex flex-col items-center space-y-6 sm:space-y-8 p-4 sm:p-8 flex-1 w-full max-w-md md:max-w-none mt-4">
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className="text-center"
         >
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 mb-2 mt-8">
             Letter Identification
           </h1>
-          <p className="text-xl text-purple-100">
-            Find all <span className="font-bold text-2xl text-cyan-400">{targetLetter}</span> letters
+          <p className="text-lg sm:text-xl text-purple-100">
+            Find all{' '}
+            <span className="font-bold text-xl sm:text-2xl text-cyan-400">{targetLetter}</span>{' '}
+            letters
           </p>
         </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-5 gap-3 md:gap-4 p-4 bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl">
-  {grid.map((row, rowIndex) =>
-    row.map((letter, colIndex) => (
-      <motion.button
-        key={`${rowIndex}-${colIndex}`}
-        onClick={() => handleClick(letter)}
-        className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-lg text-2xl font-bold transition-colors bg-purple-400/20 hover:bg-purple-400/30"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-      >
-        <motion.span
-          key={`${rowIndex}-${colIndex}-${letter}`}
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          className="block"
-        >
-          {letter}
-        </motion.span>
-      </motion.button>
-    ))
-  )}
-</div>
-
+        <div className="grid grid-cols-5 gap-2 sm:gap-3 p-2 sm:p-4 bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl w-full max-w-md mx-auto">
+          {grid.map((row, rowIndex) =>
+            row.map((letter, colIndex) => (
+              <motion.button
+                key={`${rowIndex}-${colIndex}`}
+                onClick={() => handleClick(letter)}
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 flex items-center justify-center rounded-lg text-xl sm:text-2xl font-bold transition-colors bg-purple-400/20 hover:bg-purple-400/30"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <motion.span
+                  key={`${rowIndex}-${colIndex}-${letter}`}
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  className="block"
+                >
+                  {letter}
+                </motion.span>
+              </motion.button>
+            ))
+          )}
+        </div>
       </div>
 
       {/* Stats Panel */}
-      <motion.div 
-        className="w-full md:w-96 bg-white/10 backdrop-blur-lg rounded-none md:rounded-l-2xl p-6 md:min-h-screen flex flex-col justify-center"
+      <motion.div
+        className="w-full md:w-96 bg-white/10 backdrop-blur-lg rounded-none md:rounded-l-2xl p-4 sm:p-6 md:min-h-screen flex flex-col justify-center mt-4"
         initial={{ x: 100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
       >
         {/* Timer */}
-        <div className="mb-8 flex flex-col items-center">
-          <div className="relative w-32 h-32 mb-4">
+        <div className="mb-6 sm:mb-8 flex flex-col items-center">
+          <div className="relative w-20 h-20 sm:w-28 sm:h-28 mb-4">
             <svg className="w-full h-full" viewBox="0 0 100 100">
               <circle
                 cx="50"
@@ -177,28 +178,28 @@ const Test1 = () => {
                 transition={{ duration: 1 }}
               />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center text-2xl font-bold">
+            <div className="absolute inset-0 flex items-center justify-center text-xl sm:text-2xl font-bold">
               {timeLeft}s
             </div>
           </div>
         </div>
 
         {/* Score Board */}
-        <div className="space-y-6 mb-8">
-          <div className="flex items-center justify-between bg-purple-400/20 p-4 rounded-lg">
+        <div className="space-y-5 sm:space-y-6 mb-6 sm:mb-8">
+          <div className="flex items-center justify-between bg-purple-400/20 p-3 sm:p-4 rounded-lg">
             <div className="flex items-center gap-2">
-              <CheckIcon className="w-6 h-6 text-green-400" />
-              <span className="font-semibold">Correct</span>
+              <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
+              <span className="font-semibold text-sm sm:text-base">Correct</span>
             </div>
-            <span className="text-2xl font-bold text-cyan-400">{score}</span>
+            <span className="text-xl sm:text-2xl font-bold text-cyan-400">{score}</span>
           </div>
-          
-          <div className="flex items-center justify-between bg-purple-400/20 p-4 rounded-lg">
+
+          <div className="flex items-center justify-between bg-purple-400/20 p-3 sm:p-4 rounded-lg">
             <div className="flex items-center gap-2">
-              <XMarkIcon className="w-6 h-6 text-red-400" />
-              <span className="font-semibold">Misses</span>
+              <XMarkIcon className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />
+              <span className="font-semibold text-sm sm:text-base">Misses</span>
             </div>
-            <span className="text-2xl font-bold text-red-400">{misses}</span>
+            <span className="text-xl sm:text-2xl font-bold text-red-400">{misses}</span>
           </div>
         </div>
 
@@ -206,21 +207,22 @@ const Test1 = () => {
         <AnimatePresence>
           {gameOver && (
             <motion.div
-              className="bg-purple-400/20 p-6 rounded-xl text-center"
+              className="bg-purple-400/20 p-5 sm:p-6 rounded-xl text-center"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
             >
-              <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
                 Time's Up!
               </h2>
               <div className="space-y-2">
-                <p className="text-xl">
-                  Accuracy: <span className="font-bold text-cyan-400">
+                <p className="text-lg sm:text-xl">
+                  Accuracy:{' '}
+                  <span className="font-bold text-cyan-400">
                     {((score / (score + misses)) * 100 || 0).toFixed(1)}%
                   </span>
                 </p>
-                <p className="text-purple-200">
+                <p className="text-purple-200 text-sm sm:text-base">
                   {score} hits • {misses} misses
                 </p>
               </div>
