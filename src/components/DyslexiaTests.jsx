@@ -73,14 +73,14 @@ const FloatingShapes = () => {
       animate: { y: [0, -80, 0], x: [0, 130, 0], rotate: [0, -270, -540], opacity: [0.4, 0.8, 0.4] }, // Movement, rotation, and opacity change
       transition: { duration: 26, repeat: Infinity, ease: "easeInOut" } // Duration and ease
     },
-     {
+      {
       id: 10,
       style: "w-10 h-32 bg-indigo-500/15 rounded-full", // New shape style (tall rectangle)
       initial: { y: -150, x: -30, opacity: 0.5 }, // Initial displacement and opacity
       animate: { y: [0, 120, 0], rotate: [0, 180, 360], opacity: [0.5, 0.9, 0.5] }, // Movement, rotation, and opacity change
       transition: { duration: 21, repeat: Infinity, ease: "linear" } // Duration and ease
     },
-     {
+      {
       id: 11,
       style: "w-32 h-10 bg-yellow-300/10 rounded-full", // New shape style (wide rectangle)
       initial: { y: 40, x: -160, opacity: 0.4 }, // Initial displacement and opacity
@@ -101,7 +101,7 @@ const FloatingShapes = () => {
       animate: { y: [0, 80, 0], x: [0, -90, 0], rotate: [0, -270, -540], opacity: [0.4, 0.8, 0.4] }, // Increased movement, rotation, and opacity change
       transition: { duration: 20, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" } // Faster duration
     },
-     
+      
   ];
 
   return (
@@ -109,7 +109,7 @@ const FloatingShapes = () => {
     // Hidden on small screens (md:block) to reduce clutter/performance impact
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {shapes.map(shape => (
-             <motion.div
+              <motion.div
                 key={shape.id}
                 className={`absolute ${shape.style} opacity-60`} // Base styles
                 style={{
@@ -253,6 +253,11 @@ const DyslexiaTests = () => {
   // State for tracking which tests are completed
   const [completedTests, setCompletedTests] = useState([]);
 
+  // --- Scroll to Top on Mount ---
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scrolls to the top of the viewport
+  }, []); // Empty dependency array means this runs once on mount
+
   // Effect to load completed tests from localStorage on component mount
   useEffect(() => {
     const storedCompletedTests = localStorage.getItem("completedTests");
@@ -273,12 +278,12 @@ const DyslexiaTests = () => {
     if (location.state?.testCompletedNumber) {
         const completedNumber = location.state.testCompletedNumber;
         // Add the completed test number if it's not already present
-         setCompletedTests((prev) =>
-             prev.includes(completedNumber) ? prev : [...prev, completedNumber]
-         );
+          setCompletedTests((prev) =>
+              prev.includes(completedNumber) ? prev : [...prev, completedNumber]
+          );
         // Optional: Show popup based on which test was completed
         if (completedNumber === 4) { // Example: Show popup only after test 4
-             setShowPopup(true);
+              setShowPopup(true);
         }
       // Clear the location state to prevent reprocessing on refresh/revisit
       navigate(location.pathname, { replace: true, state: {} });
@@ -290,7 +295,7 @@ const DyslexiaTests = () => {
   // Effect to save completed tests to localStorage whenever the state changes
   useEffect(() => {
     // Avoid writing the initial empty array [] if it hasn't changed from default
-     if (completedTests.length > 0 || localStorage.getItem("completedTests") !== null) {
+      if (completedTests.length > 0 || localStorage.getItem("completedTests") !== null) {
         localStorage.setItem("completedTests", JSON.stringify(completedTests));
     }
   }, [completedTests]);
@@ -431,6 +436,7 @@ const DyslexiaTests = () => {
       {/* Footer - Positioned at the bottom, above shapes */}
       <footer className="w-full text-center p-4 mt-auto z-10">
           <p className="text-xs text-white/40">&copy; {new Date().getFullYear()}  DyslexiAid. All rights reserved.</p>
+
       </footer>
 
     </div>
